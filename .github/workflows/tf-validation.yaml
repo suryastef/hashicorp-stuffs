@@ -1,0 +1,47 @@
+name: Terraform fmt and validate
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [master]
+
+env:
+  exclude-dir-param: "-path './**/test/**' -o -path './**/modules/**'"
+
+jobs:
+  tf-fmt-validate:
+    name: Terraform fmt and validate
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Git Checkout bfi-terraform
+      uses: actions/checkout@v3
+      with:
+        ref: master
+        fetch-depth: 0
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform fmt
+      id: fmt
+      run: >-
+        for i in $(find . -type d \( ${{env.exclude-dir-param}} \) -prune -o -name '*.tf' -printf '%h\n' | sort | uniq);
+        do 
+            terraform -chdir=$i fmt;
+        done
+
+    - name: Update unformatted tf file
+      uses: test-room-7/action-update-file@v1
+      with:
+          file-path: '*/*.tf'
+          commit-msg: 'chore : terraform fmt'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Terraform init & validate
+      id: validate
+      run: >-
+        for i in $(find . -type d \( ${{env.exclude-dir-param}} \) -prune -o -name '*.tf' -printf '%h\n' | sort | uniq);
+        do 
+            terraform -chdir=$i init -backend=false;
+            terraform -chdir=$i validate -no-color;
+        done
