@@ -33,7 +33,7 @@ jobs:
     - name: Update unformatted tf file
       uses: test-room-7/action-update-file@v1
       with:
-          file-path: '*/*.tf'
+          file-path: '**/*.tf'
           commit-msg: 'chore : terraform fmt'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
