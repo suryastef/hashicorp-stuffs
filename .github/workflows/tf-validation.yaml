@@ -29,18 +29,13 @@ jobs:
             terraform -chdir=$i fmt;
         done
 
-    - name: Extract branch name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
-
     - name: Debug
-      run: echo running on branch ${{ github.head_ref }}
+      run: echo running on branch ${{ github.head_ref || github.ref_name }} 
 
     - name: Update unformatted tf file
       uses: test-room-7/action-update-file@v1
       with:
-          branch: ${{ github.head_ref }}
+          branch: ${{ github.head_ref || github.ref_name }} 
           file-path: '**/*.tf'
           commit-msg: 'chore : terraform fmt'
           github-token: ${{ secrets.GITHUB_TOKEN }}
