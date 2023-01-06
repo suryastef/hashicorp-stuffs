@@ -16,7 +16,7 @@ jobs:
     - name: Git Checkout bfi-terraform
       uses: actions/checkout@v3
       with:
-        fetch-depth: 1
+        fetch-depth: 0
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
@@ -35,7 +35,7 @@ jobs:
       id: extract_branch
 
     - name: Debug
-      run: git branch --show-current
+      run: echo running on branch ${GITHUB_REF##*/} && git branch --show-current
 
     - name: Update unformatted tf file
       uses: test-room-7/action-update-file@v1
