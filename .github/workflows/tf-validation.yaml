@@ -63,5 +63,5 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: find . -type d \( ${{env.exclude-dir-param}} \) -prune -o -name '*.tf' -printf '%h\n' | sort | uniq
+          directory: $(find . -type d \( ${{env.exclude-dir-param}} \) -prune -o -name '*.tf' -printf '%h\n' | sort | uniq)
           framework: terraform 
