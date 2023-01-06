@@ -35,7 +35,7 @@ jobs:
       id: extract_branch
 
     - name: Debug
-      run: echo running on branch ${GITHUB_REF##*/}
+      run: git branch --show-current
 
     - name: Update unformatted tf file
       uses: test-room-7/action-update-file@v1
