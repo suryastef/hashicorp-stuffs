@@ -1,5 +1,7 @@
 name: Terraform fmt and validate
 on:
+  push:
+    branches: [master]
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [master]
