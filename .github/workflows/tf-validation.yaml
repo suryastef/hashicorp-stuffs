@@ -35,12 +35,12 @@ jobs:
       id: extract_branch
 
     - name: Debug
-      run: echo running on branch ${GITHUB_REF##*/} && echo $(git branch --show-current)
+      run: echo running on branch ${{ github.head_ref }}
 
     - name: Update unformatted tf file
       uses: test-room-7/action-update-file@v1
       with:
-          branch: ${{ steps.extract_branch.outputs.branch }}
+          branch: ${{ github.head_ref }}
           file-path: '**/*.tf'
           commit-msg: 'chore : terraform fmt'
           github-token: ${{ secrets.GITHUB_TOKEN }}
