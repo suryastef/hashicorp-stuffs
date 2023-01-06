@@ -13,19 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Extract branch name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
-
-    - name: Debug
-      run: echo ${{ steps.extract_branch.outputs.branch }}
-
     - name: Git Checkout bfi-terraform
       uses: actions/checkout@v3
       with:
-        ref: ${{ steps.extract_branch.outputs.branch }}
-        fetch-depth: 0
+        fetch-depth: 1
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
@@ -38,9 +29,18 @@ jobs:
             terraform -chdir=$i fmt;
         done
 
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+
+    - name: Debug
+      run: echo ${{ steps.extract_branch.outputs.branch }}
+
     - name: Update unformatted tf file
       uses: test-room-7/action-update-file@v1
       with:
+          branch: ${{ steps.extract_branch.outputs.branch }}
           file-path: '**/*.tf'
           commit-msg: 'chore : terraform fmt'
           github-token: ${{ secrets.GITHUB_TOKEN }}
