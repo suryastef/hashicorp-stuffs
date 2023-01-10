@@ -1,12 +1,6 @@
-resource "google_project_service" "project" {
-  project = "sandbox-suryastef"
-  service = "container.googleapis.com"
-
-  timeouts {
-    create = "30m"
-    update = "40m"
-  }
-
+resource "google_project_service" "gke" {
+  project                    = var.gcp_project
+  service                    = "container.googleapis.com"
   disable_dependent_services = true
   disable_on_destroy         = true
 }
