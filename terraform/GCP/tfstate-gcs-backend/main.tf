@@ -5,6 +5,7 @@ resource "google_storage_bucket" "tf_state" {
   location                    = var.gcp_region
   force_destroy               = false
   storage_class               = var.storage-class
+  public_access_prevention    = "enforced"
   uniform_bucket_level_access = true
 
   versioning {
