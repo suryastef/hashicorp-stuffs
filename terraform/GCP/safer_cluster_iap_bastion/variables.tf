@@ -64,19 +64,19 @@ variable "ip_range_pods_name" {
 variable "ip_range_services_name" {
   type        = string
   description = "The secondary ip range to use for pods"
-  default = "ip-range-svc"
+  default     = "ip-range-svc"
 }
 
 variable "pool_name" {
   type        = string
   description = "The pool name"
-  default = "safer-pool"
+  default     = "safer-pool"
 }
 
 variable "machine_type" {
   type        = string
   description = "The machine type for node pool"
-  default = "e2-medium"
+  default     = "e2-medium"
 }
 
 variable "bastion_members" {

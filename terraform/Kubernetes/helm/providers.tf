@@ -1,6 +1,6 @@
 # Description : Get Kubernetes endpoint address from gke tfstate 
 data "terraform_remote_state" "gke" {
-  backend   = "gcs"
+  backend = "gcs"
   config = {
     bucket = "suryastef-tfstate"
     prefix = "safer-cluster-iap-bastion"
