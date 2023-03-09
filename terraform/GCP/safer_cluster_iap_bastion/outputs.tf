@@ -86,8 +86,8 @@ output "bastion_kubectl_command" {
   value       = "HTTPS_PROXY=localhost:8888 kubectl get pods --all-namespaces"
 }
 
-/* output "node_pools" {
+output "gke" {
   sensitive   = true
   description = "Compute Engine node pools details"
   value       = module.gke
-} */
+}
