@@ -22,28 +22,42 @@ module "gke" {
   name                    = var.cluster_name
   region                  = var.region
   zones                   = var.zones
-  regional                = false
+  regional                = true
   network                 = module.vpc.network_name
   subnetwork              = module.vpc.subnets_names[0]
   ip_range_pods           = module.vpc.subnets_secondary_ranges[0].*.range_name[0]
   ip_range_services       = module.vpc.subnets_secondary_ranges[0].*.range_name[1]
   enable_private_endpoint = false
-  release_channel         = "REGULAR" // default
+  release_channel         = "STABLE"
   master_authorized_networks = [{
     cidr_block   = "${module.bastion.ip_address}/32"
     display_name = "Bastion Host"
   }]
   grant_registry_access = true
+
+  cluster_autoscaling = {
+    enabled             = true
+    autoscaling_profile = "OPTIMIZE_UTILIZATION"
+    max_cpu_cores       = 2
+    min_cpu_cores       = 0
+    max_memory_gb       = 8
+    min_memory_gb       = 0
+    gpu_resources       = []
+    auto_repair         = true
+    auto_upgrade        = true
+  }
+
   node_pools = [
     {
-      name          = "safer-pool"
-      disk_size_gb  = 100         // default
-      machine_type  = "e2-medium" //default
-      preemptible   = false
-      min_count     = 1
-      max_count     = 4
-      auto_upgrade  = true
-      node_metadata = "GKE_METADATA"
+      name               = "safer-pool"
+      disk_size_gb       = 100
+      machine_type       = var.machine_type
+      preemptible        = false
+      initial_node_count = 0
+      min_count          = 0
+      max_count          = 3
+      auto_upgrade       = true
+      node_metadata      = "GKE_METADATA"
     }
   ]
 }
